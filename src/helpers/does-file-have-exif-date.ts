@@ -17,8 +17,6 @@ export async function doesFileHaveExifDate(filePath: string): Promise<boolean> {
 
     return cleanedDateStr.length > 0
   }
-
-  console.log({DateTimeOriginal: readResult.DateTimeOriginal})
   
   return !isNullOrUndefined(readResult.DateTimeOriginal)
 }
