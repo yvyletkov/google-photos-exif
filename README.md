@@ -21,7 +21,7 @@ Example usage:
 
 ```
 yarn
-yarn start --inputDir ~/takeout --outputDir ~/output --errorDir ~/error
+yarn start --inputDir ~/takeout
 ```
 
 
@@ -96,8 +96,6 @@ The first step to using this tool is to request & download a `Google Takeout`. A
 The tool takes in three parameters:
 
 1. an `inputDir` directory path containing the extracted Google Takeout.
-2. an `outputDir` directory path where processed files will be moved to. This needs to be an empty directory and can be anywhere on the disk. 
-3. an `errorDir` directory path where images with bad EXIF data that fail to process will be moved to. The folder can be empty.
 
 The `inputDir` needs to be a single directory containing an _extracted_ zip from Google takeout. As described in the section above, it is important that the zip has been extracted into a directory (this tool doesn't extract zips for you) and that it is a single folder containing the whole Takeout (or if coming from multiple archives, that they have been properly merged together). 
 
@@ -141,13 +139,9 @@ The tool will do the following:
    
    a. Look for a corresponding sidecar JSON metadata file (see the section below for more on this) and if found, read the `photoTakenTime` field
    
-   b. Copy the media file to the output directory
-
-   c. Update the file modification date to the `photoTakenTime` found in the JSON metadata
+   b. Update the file modification date to the `photoTakenTime` found in the JSON metadata
    
-   d. If the file supports EXIF (e.g. JPEG images), read the EXIF metadata and write the `DateTimeOriginal` field if it does not already have a value in this field 
-
-   e. If an error occurs whilst processing the file, copy it to the directory specified in the `errorDir` argument, so that it can be inspected manually or removed
+   c. If the file supports EXIF (e.g. JPEG images), read the EXIF metadata and write the `DateTimeOriginal` field if it does not already have a value in this field 
 
 3. Display a summary of work completed
 
