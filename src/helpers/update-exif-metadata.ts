@@ -15,7 +15,8 @@ export async function updateExifMetadata(fileInfo: MediaFileInfo, timeTaken: str
   }
 
   try {
-    if (fileInfo.mediaFileExtension === 'png' || fileInfo.mediaFileExtension === 'PNG') {
+    if (fileInfo.mediaFileExtension === '.png' || fileInfo.mediaFileExtension === '.PNG') {
+      console.log('IS PNG!')
       await exiftool.write(fileInfo.mediaFilePath, {
         CreateDate: timeTaken,
       });
@@ -32,7 +33,7 @@ export async function updateExifMetadata(fileInfo: MediaFileInfo, timeTaken: str
 
   } catch (error) {
 
-    console.log('---- writeError, ' + fileInfo.mediaFileName + ', ext: ' + fileInfo.mediaFileExtension)
+    console.log('---- writeError, ' + fileInfo.mediaFileName + ', error:', error)
 
     return 'writeError'
 
