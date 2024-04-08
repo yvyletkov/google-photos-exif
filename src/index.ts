@@ -112,7 +112,7 @@ class GooglePhotosExif extends Command {
     });
 
     this.log(`--- Processing media files ---`);
-    const fileNamesWithEditedExif: string[] = [];
+    const fileNamesWithEditedDateTimeOriginal: string[] = [];
     const fileNamesWithWriteError: string[] = [];
     const fileNamesWithNotSupportError: string[] = [];
     const fileNamesWithUpdatedCreateDate: string[] = [];
@@ -136,26 +136,23 @@ class GooglePhotosExif extends Command {
           if (!hasExifDate) {
             const result = await updateExifMetadata(mediaFile, photoTimeTaken);
             if (!result) {
-              fileNamesWithEditedExif.push(mediaFile.mediaFileName);
+              fileNamesWithEditedDateTimeOriginal.push(mediaFile.mediaFileName);
               this.log(`--- DateTimeOriginal successfully updated: ${mediaFile.mediaFileName}`);
             }
             if (result === 'writeError') {
               fileNamesWithWriteError.push(mediaFile.mediaFileName)
-              this.log(`--- Write error: ${mediaFile.mediaFileName}`);
+              this.log(`--- Write ERROR: ${mediaFile.mediaFileName}`);
             }
             if (result === 'notSupportError') {
               fileNamesWithNotSupportError.push(mediaFile.mediaFileName)
-              this.log(`--- EXIF not supported error: ${mediaFile.mediaFileName}`);
+              this.log(`--- EXIF not supported ERROR: ${mediaFile.mediaFileName}`);
             }
             if (result === 'updatedCreateDate') {
               fileNamesWithUpdatedCreateDate.push(mediaFile.mediaFileName)
-              this.log(`--- Update CreateDate: ${mediaFile.mediaFileName}`);
-
+              this.log(`--- CreateDate successfully updated: ${mediaFile.mediaFileName}`);
             }
           }
         }
-
-        // await updateFileModificationDate(mediaFile.outputFilePath, photoTimeTaken);
 
         await updateFileModificationDate(mediaFile.mediaFilePath, photoTimeTaken);
       }
@@ -167,16 +164,10 @@ class GooglePhotosExif extends Command {
       this.log(`${count} files with extension ${extension}`);
     });
     this.log(`--- The file modified timestamp has been updated on all media files ---`)
-    if (fileNamesWithEditedExif.length > 0) {
-      this.log(`--- Found and updated ${fileNamesWithEditedExif.length} files which support EXIF, but had no DateTimeOriginal field. ---`);
-      // fileNamesWithEditedExif.forEach(fileNameWithEditedExif => this.log(fileNameWithEditedExif));
-    } else {
-      this.log(`--- We did not edit EXIF metadata for any of the files. This could be because all files already had a value set for the DateTimeOriginal field, or because we did not have a corresponding JSON file. ---`);
-    }
-
-    this.log(`--- Failed to write new DateTimeOriginal to ${fileNamesWithWriteError.length} files ---`);
-    this.log(`--- ${fileNamesWithNotSupportError.length} files had error because they had no EXIF support ---`);
-    this.log(`--- Updated CreateDate in ${fileNamesWithUpdatedCreateDate.length} files ---`);
+    this.log(`--- Found and updated DateTimeOriginal in ${fileNamesWithEditedDateTimeOriginal.length} files ---`);
+    this.log(`--- Found and updated CreateDate in ${fileNamesWithUpdatedCreateDate.length} files ---`);
+    this.log(`--- Failed to write: ${fileNamesWithWriteError.length} files ---`);
+    this.log(`--- No EXIF Support: ${fileNamesWithNotSupportError.length} files ---`);
     
   }
 }

@@ -9,8 +9,6 @@ const { unlink, copyFile } = fspromises;
 export async function updateExifMetadata(fileInfo: MediaFileInfo, timeTaken: string): Promise<void | 'notSupportError' | 'writeError' | 'updatedCreateDate'> {
   if (!doesFileSupportExif(fileInfo.mediaFilePath)) {
 
-    console.log('---- notSupportError')
-
     return 'notSupportError';
   }
 
@@ -29,11 +27,7 @@ export async function updateExifMetadata(fileInfo: MediaFileInfo, timeTaken: str
 
     await unlink(`${fileInfo.mediaFilePath}_original`); // exiftool will rename the old file to {filename}_original, we can delete that
 
-    console.log('---- success')
-
   } catch (error) {
-
-    console.log('---- writeError, ' + fileInfo.mediaFileName + ', error:', error)
 
     return 'writeError'
 
